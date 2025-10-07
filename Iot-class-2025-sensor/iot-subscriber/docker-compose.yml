@@ -1,0 +1,6 @@
+services:
+  sensor-subscriber:
+    build:
+      context: ./app
+    env_file:
+      - .env
