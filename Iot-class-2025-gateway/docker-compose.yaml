@@ -1,0 +1,23 @@
+services:
+  mosquitto:
+      build:
+        context: .
+      hostname: mosquitto
+      container_name: mosquitto
+      volumes:
+        - ./config:/mosquitto/config
+        - ./data:/mosquitto/data
+        - ./log:/mosquitto/log
+      environment:
+        - BRIDGE_ADDRESS=${MQTT_BRIDGE_TO}
+      entrypoint: /bin/sh
+      command: -c "envsubst < /mosquitto/config/mosquitto.template.conf > /tmp/mosquitto.conf && mosquitto -c /tmp/mosquitto.conf"
+      restart: unless-stopped
+      ports:
+        - "1883:1883"
+        # - "9001:9001"
+      networks:
+        - iot 
+networks:
+  iot:
+    driver: bridge
